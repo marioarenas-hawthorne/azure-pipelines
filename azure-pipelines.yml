@@ -3,31 +3,24 @@
 # Add steps that run tests, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/php
 
-# at the top of your YAML file 
-# set some variables that you'll need when you deploy
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
 variables:
-# the name of the service connection that you created above
-serviceConnectionToAzure: test-connection
-# the name of your web app here is the same one you used above
-# when you created the web app using the Azure CLI
-appName: jhservice-test
+  phpVersion: 7.2
 
-- task: ArchiveFiles@1
-  displayName: Archive files
-  inputs:
-    rootFolder: $(System.DefaultWorkingDirectory)
-    includeRootFolder: false
-    archiveType: zip
+steps:
+- script: |
+    sudo update-alternatives --set php /usr/bin/php$(phpVersion)
+    sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
+    sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
+    sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
+    sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+    php -version
+  displayName: 'Use PHP version $(phpVersion)'
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish Artifact
-  inputs:
-    PathtoPublish: $(build.artifactstagingdirectory)
-
-- task: AzureWebApp@1
-  displayName: Azure Web App Deploy
-  inputs:
-    azureSubscription: $(serviceConnectionToAzure)
-    appType: webAppLinux
-    appName: $(appName)
-    package: $(build.artifactstagingdirectory)/**/*.zip
+- script: composer install --no-interaction --prefer-dist
+  displayName: 'composer install'
