@@ -19,6 +19,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- script: composer install --no-interaction --prefer-dist
+  displayName: 'composer install'
+  
 # add these as the last steps (below all the other `task` items under `steps`)
 # to deploy to your app service
 - task: ArchiveFiles@1
