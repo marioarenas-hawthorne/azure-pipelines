@@ -19,14 +19,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
 # add these as the last steps (below all the other `task` items under `steps`)
 # to deploy to your app service
 - task: ArchiveFiles@1
