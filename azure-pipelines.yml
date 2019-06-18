@@ -13,7 +13,7 @@ variables:
   appName: jhservice-test
 
 trigger:
-- master
+- development
 
 pool:
   vmImage: 'ubuntu-latest'
